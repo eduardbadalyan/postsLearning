@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    margin: 20px 50px;
+    padding: 30px;
+    width: 350px;
+    box-shadow: inset 0px 0px 50px 0px rgba(101, 123, 133, 0.534);
+    border-radius: 10px;
+}
