@@ -1,0 +1,32 @@
+body {
+    width: 100%;
+}
+
+    .header {
+        padding: .5rem 15%;
+    }
+
+        .btn-header{
+            color: #cccccc;
+            float: right;
+        }
+
+        .title-header{
+            color: #cccccc;
+        }
+
+            .title-header:hover{
+                color: #cccccc;
+            }
+
+    .content {
+        padding: 1.5rem 15%;
+    }
+
+        .card-container{
+            width: 31.2%;
+            float:left;
+            border:none;
+            margin:1%;
+            min-height: 300px;
+        }
