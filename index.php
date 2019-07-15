@@ -10,6 +10,16 @@
         exit;
     };
 
+    if(isset($_POST["register"])) {
+        header ("Location: register.php");
+        exit;
+    };
+
+    if(isset($_POST["exit"])) {
+        header ("Location: exit.php");
+        exit;
+    };
+
     $count = $result_set->num_rows;
     for($i=1 ; $i<= $count ; $i++) {
         if(isset($_POST["edit_post".$i.""])) {
@@ -31,13 +41,43 @@
         <link rel="stylesheet" href="style_index.css">
     </head>
     <body>
-        <div class="header dropdown-header table-dark">
-            <span class="btn title-header">Start Bootstrap</span>
-            <span class="btn btn-dark btn-header">Contact</span>
-            <span class="btn btn-dark btn-header">Services</span>
-            <span class="btn btn-dark btn-header">About</span>
-            <span class="btn btn-dark btn-header">Home</span>
-        </div>
+            <div class="header dropdown-header table-dark">
+                <span class="btn title-header">.</span>
+                <span class="btn title-header" style="float: left;">Start Bootstrap</span>
+                <div class="row" style="float: left;">
+                <?php
+                    if($_COOKIE['user'] == ''):
+                ?>
+                <form name="login" action="auth.php" method="post" style="margin-block-end: 0;">
+                <label for="email">
+                    <span style="color:white;margin-left:20px;">Email : </span>
+                </label>
+                <input type="text" name="email" id="email" placeholder="enter your email" style="padding:2px 5px;">
+                <label for="password">
+                    <span style="color:white;margin-left:20px;">Password : </span>
+                </label>
+                <input type="password" name="password" id="password" placeholder="enter your password" style="padding:2px 5px;">
+                <input type="submit" name="login" value="Log in" class="btn btn-outline-light" style="margin-left:20px;">
+                </form>
+                <form action="" name="register" method="post" style="margin-block-end: 0;">
+                <input type="submit" name="register" value="Register" class="btn btn-outline-light" style="margin-left:20px;">
+                </form>
+                <?php
+                    else:
+                ?>
+                <form action="" name="exit" method="post">
+                <span style="color:white;margin-left:20px;">Hello <?=$_COOKIE['user']?>!!!</span>
+                <input type="submit" name="exit" value="Exit" class="btn btn-outline-light" style="margin-left:20px;">
+                </form>
+                <?php
+                    endif;
+                ?>
+                </div>
+                <span class="btn btn-dark btn-header">Contact</span>
+                <span class="btn btn-dark btn-header">Services</span>
+                <span class="btn btn-dark btn-header">About</span>
+                <span class="btn btn-dark btn-header">Home</span>
+            </div>
         <div class="content">
             <div class="container-fluid">
                 <div class="container">
