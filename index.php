@@ -46,7 +46,7 @@
                 <span class="btn title-header" style="float: left;">Start Bootstrap</span>
                 <div class="row" style="float: left;">
                 <?php
-                    if($_COOKIE['user'] == ''):
+                    if($_COOKIE['name'] == ''):
                 ?>
                 <form name="login" action="auth.php" method="post" style="margin-block-end: 0;">
                 <label for="email">
@@ -66,7 +66,7 @@
                     else:
                 ?>
                 <form action="" name="exit" method="post">
-                <span style="color:white;margin-left:20px;">Hello <?=$_COOKIE['user']?>!!!</span>
+                <span style="color:white;margin-left:20px;">Hello <?=$_COOKIE['name']?>!!!</span>
                 <input type="submit" name="exit" value="Exit" class="btn btn-outline-light" style="margin-left:20px;">
                 </form>
                 <?php
@@ -89,20 +89,31 @@
                                                 <div class=\"card-body\">
                                                     <h4 class=\"card-title\">".$row["title"]."</h4>
                                                     <p class=\"card-text\">".$row["description"]."</p>
-                                                    <p class=\"card-text text-right\" style=\"font-size:12px;\">".$row["name"]."</p>
-                                                    <input type=\"submit\" name=\"edit_post".$row["id"]."\" value=\"Edit post\" class=\"btn btn-success\">
+                                                    <p class=\"card-text text-right\" style=\"font-size:12px;\">".$row["name"]."</p>";
+                                                if($_COOKIE['name'] == ''){
+                                                    echo "</div>
+                                                    </div>";}
+                                                    else if ($_COOKIE['user_id'] == $row["user_id"]){
+                                                    echo "<input type=\"submit\" name=\"edit_post".$row["id"]."\" value=\"Edit post\" class=\"btn btn-success\">
                                                     <input type=\"submit\" name=\"delete_post".$row["id"]."\" value=\"Delete post\" class=\"btn btn-danger\">
-                                                </div>
-                                            </div>";
+                                                    </div>
+                                            </div>";}
+                                            else{
+                                                echo "</div></div>";
+                                            };
                                 }
                             };
                             printResult($result_set);
+                            if($_COOKIE['name'] != ''):
                         ?>
                         <div class="card text-center card-container">
                             <div class="card-body">
                                 <input type="submit" name="add_post" value="Add post" class="btn btn-primary" style="margin:auto;padding:10px;">
                             </div>
                         </div>
+                        <?php
+                            endif;
+                        ?>
                     </form>
                 </div>
             </div>
