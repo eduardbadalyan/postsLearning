@@ -13,7 +13,8 @@
         exit();
     }
 
-    setcookie('user', $user['name'], time() + 3600 * 24, "/");
+    setcookie('name', $user['name'], time() + 3600 * 24, "/");
+    setcookie('user_id', $user['id'], time() + 3600 * 24, "/");
 
     $mysqli->close ();
     header ("Location: index.php");
