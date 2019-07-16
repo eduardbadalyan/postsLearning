@@ -35,7 +35,7 @@
 </head>
 <body>
     <?php
-    if($_COOKIE['name'] == ''):
+    if($_COOKIE['user_id'] != $user_id):
         $mysqli->close ();
         header ("Location: /");
         exit;
