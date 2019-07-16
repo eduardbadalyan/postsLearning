@@ -7,9 +7,12 @@
             $description = htmlspecialchars ($_POST["description"]);
             $user_id = $_COOKIE['user_id'];
 
+            $title = addcslashes($title, "'");
+            $description = addcslashes($description, "'");
+
             $mysqli->query ("INSERT INTO `posts` VALUES (NULL,'".$title."','".$description."','".$user_id."')");
             $mysqli->close ();
-            header ("Location: /");
+            header ("Location: create_likes.php");
             exit;
         }
 ?>

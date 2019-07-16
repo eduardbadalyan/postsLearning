@@ -22,6 +22,6 @@
     setcookie('user_id', $user['id'], time() + 3600 * 24, "/");
 
     $mysqli->close ();
-    header ("Location: /");
+    header ("Location: create_likes.php");
     exit();
 ?>
