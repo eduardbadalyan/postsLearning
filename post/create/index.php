@@ -24,6 +24,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <?php
+    if($_COOKIE['name'] == ''):
+        $mysqli->close ();
+        header ("Location: /");
+        exit;
+    else:
+    ?>
     <div class="content">
         <h2>Add post</h2>
         <form name="feed" action="" method="post">
@@ -38,5 +45,8 @@
             <input type="submit" name="done" value="Done!" class="btn btn-success">
         </form>
     </div>
+    <?php
+    endif;
+    ?>
 </body>
 </html>
