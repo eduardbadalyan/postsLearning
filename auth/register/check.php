@@ -15,7 +15,11 @@
     };
 
     $mysqli = new mysqli("localhost", "root", "root", "myBase");
-    $result = $mysqli->query("INSERT INTO `users` VALUES (NULL,'".$name."','".$age."','".$email."','".$password."')");
+    $mysqli->query("INSERT INTO `users` VALUES (NULL,'".$name."','".$age."','".$email."','".$password."')");
+    $result = $mysqli->query("SELECT * FROM `users` WHERE `email`='$email' AND `password`='$password'");
+    $user = $result->fetch_assoc();
+    setcookie('name', $user['name'], time() + 3600 * 24, "/");
+    setcookie('user_id', $user['id'], time() + 3600 * 24, "/");
 
     $mysqli->close ();
     header ("Location: /");
