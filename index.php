@@ -17,6 +17,8 @@
                                                                     ON x.id=y.id) p
                                      INNER JOIN `users` ON users.id=p.user_id ORDER BY p.id;");
     $result = $mysqli->query ("SELECT posts.*,users.name FROM `posts` INNER JOIN `users` ON users.id=posts.user_id ORDER BY posts.id");
+    $result_script = $mysqli->query ("SELECT posts.*,users.name FROM `posts` INNER JOIN `users` ON users.id=posts.user_id ORDER BY posts.id");
+
     
     
     if(isset($_POST["add_post"])) {
@@ -40,14 +42,6 @@
             header ("Location: post/delete/delete.php?delete=".$line["id"]."");
             exit;
         }
-        if(isset($_POST["like".$line["id"].""])) {
-            header ("Location: post/like/like.php?like=".$line["id"]."");
-            exit;
-        }        
-        if(isset($_POST["dislike".$line["id"].""])) {  
-            header ("Location: post/dislike/dislike.php?dislike=".$line["id"]."");
-            exit;    
-        }
     };
     if(isset($_POST["home"])) {
         header ("Location: /");
@@ -66,6 +60,64 @@
                                  crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/f5f6b39f2f.js"></script>
         <link rel="stylesheet" href="style.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            <?php
+                while (($gic = $result_script->fetch_assoc()) != false):
+                    $id = $gic["id"];
+            ?>
+                $(document).ready(function () {
+                    $("#like<?=$id?>").bind("click",function() {
+                        $.ajax ({
+                            url: "like.php",
+                            type: "POST",
+                            data: ({order:"like",post_id:<?=$id?>}),
+                            dataType: "html",
+                            //beforeSend: funcBefore,
+                            success: function  (like,dislike) {
+                                if(like == 1){
+                                    document.getElementById('like<?=$id?>').style.color = "blue";
+                                }else if(like == 0){
+                                    document.getElementById('like<?=$id?>').style.color = "grey";
+                                };
+                                if(dislike == 1){
+                                    document.getElementById('dislike<?=$id?>').style.color = "blue";
+                                }else if(dislike == 0){
+                                    document.getElementById('dislike<?=$id?>').style.color = "grey";
+                                }else{
+                                    document.getElementById('like<?=$id?>').style.color = "pink";
+                                }                                
+                            }
+                        });
+                    });
+                });
+                $(document).ready(function () {
+                    $("#dislike<?=$id?>").bind("click",function() {
+                        $.ajax ({
+                            url: "dislike.php",
+                            type: "POST",
+                            data: ({order:"dislike",post_id:<?=$id?>}),
+                            dataType: "html",
+                            //beforeSend: funcBefore,
+                            success: function (like,dislike) {
+                                if(like == 1){
+                                    document.getElementById('like<?=$id?>').style.color = "blue";
+                                }else if(like == 0){
+                                    document.getElementById('like<?=$id?>').style.color = "grey";
+                                };
+                                if(dislike == 1){
+                                    document.getElementById('dislike<?=$id?>').style.color = "blue";
+                                }else if(dislike == 0){
+                                    document.getElementById('dislike<?=$id?>').style.color = "grey";
+                                }                                
+                            }
+                        });
+                    });
+                });
+            <?php
+                endwhile;
+            ?>
+        </script>
 
     </head>
     <body>
@@ -130,7 +182,7 @@
                                                         $like_res = $choose_like->fetch_array(MYSQLI_ASSOC)["result"];
                                                         echo $like_res;
                                                         if($_COOKIE['name'] != ''){
-                                                        echo "<button type=\"submit\" name=\"like".$row["id"]."\" style=\"";
+                                                        echo "<button type=\"submit\" id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
                                                         if($like_res != NULL){
                                                         if ($like_res == true){
                                                             echo "color:blue;";
@@ -144,7 +196,7 @@
                                                                 echo "color:blue;";
                                                         }}
                                                         echo "\">".$row["count_likes"]."</span>
-                                                        <button type=\"submit\" name=\"dislike".$row["id"]."\" style=\"";
+                                                        <button type=\"submit\" id=\"dislike".$row["id"]."\" name=\"dislike".$row["id"]."\" style=\"";
                                                         if(is_null($like_res) == false){
                                                         if ($like_res != NULL){
                                                             echo "color:red;";
@@ -179,7 +231,7 @@
                                                     if($_COOKIE['name'] != ''){
                                                     $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
                                                     $like_res = $choose_like->fetch_array(MYSQLI_ASSOC)["result"];
-                                                    echo "<button type=\"submit\" name=\"like".$row["id"]."\" style=\"";
+                                                    echo "<button type=\"submit\" id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
                                                     if($like_res != NULL){
                                                     if ($like_res == true){
                                                         echo "color:blue;";
@@ -193,7 +245,7 @@
                                                             echo "color:blue;";
                                                     }}
                                                     echo "\">".$row["count_likes"]."</span>
-                                                    <button type=\"submit\" name=\"dislike".$row["id"]."\" style=\"";
+                                                    <button type=\"submit\" id=\"dislike".$row["id"]."\" name=\"dislike".$row["id"]."\" style=\"";
                                                     if($like_res != NULL){
                                                     if ($like_res == false){
                                                         echo "color:red;";
