@@ -2,22 +2,20 @@
     $mysqli = new mysqli ("localhost", "root", "root", "myBase");
     $mysqli->query ("SET NAMES 'utf8'");
     $result_set = $mysqli->query ("SELECT p.*,`users`.name FROM (SELECT x.*,y.count_dislikes FROM 
-                                                                (SELECT a.*,b.count_likes FROM 
-                                                                    (SELECT `posts`.*,COUNT(`likes`.user_id) count_null FROM `posts` 
-                                                                        INNER JOIN `likes` ON `posts`.id=`likes`.post_id 
-                                                                            WHERE `likes`.result IS NULL GROUP BY `likes`.post_id) a 
-                                                                LEFT JOIN 
+                                                                    (SELECT a.*,b.count_likes FROM 
+                                                                        (SELECT `posts`.* FROM `posts`) a 
+                                                                    LEFT JOIN 
                                                                     (SELECT `posts`.*,COUNT(`likes`.user_id) count_likes FROM `posts` 
                                                                         INNER JOIN `likes` ON `posts`.id=`likes`.post_id WHERE `likes`.result = 1 
                                                                             GROUP BY `likes`.post_id) b 
-                                                                ON a.id=b.id) x
-                                                            LEFT JOIN 
+                                                                    ON a.id=b.id) x
+                                                                LEFT JOIN 
                                                                 (SELECT `posts`.*,COUNT(`likes`.user_id) count_dislikes FROM `posts` 
                                                                     INNER JOIN `likes` ON `posts`.id=`likes`.post_id 
                                                                         WHERE `likes`.result = 0 
                                                                             GROUP BY `likes`.post_id) y 
-                                                            ON x.id=y.id) p
-                                    INNER JOIN `users` ON users.id=p.user_id ORDER BY p.id;");
+                                                                    ON x.id=y.id) p
+                                     INNER JOIN `users` ON users.id=p.user_id ORDER BY p.id;");
     $result = $mysqli->query ("SELECT posts.*,users.name FROM `posts` INNER JOIN `users` ON users.id=posts.user_id ORDER BY posts.id");
     
     
@@ -68,6 +66,7 @@
                                  crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/f5f6b39f2f.js"></script>
         <link rel="stylesheet" href="style.css">
+
     </head>
     <body>
         <div class="header dropdown-header table-dark">
@@ -126,9 +125,10 @@
                                                         <h4 class=\"card-title\">".$row["title"]."</h4>
                                                         <p class=\"card-text\">".$row["description"]."</p>
                                                         <p class=\"card-text text-right\" style=\"font-size:12px;\">".$row["name"]."</p>
-                                                        <br>";
+                                                        <br>".$row["id"]."";
                                                         $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
                                                         $like_res = $choose_like->fetch_array(MYSQLI_ASSOC)["result"];
+                                                        echo $like_res;
                                                         if($_COOKIE['name'] != ''){
                                                         echo "<button type=\"submit\" name=\"like".$row["id"]."\" style=\"";
                                                         if($like_res != NULL){
@@ -145,8 +145,8 @@
                                                         }}
                                                         echo "\">".$row["count_likes"]."</span>
                                                         <button type=\"submit\" name=\"dislike".$row["id"]."\" style=\"";
-                                                        if($like_res != NULL){
-                                                        if ($like_res == false){
+                                                        if(is_null($like_res) == false){
+                                                        if ($like_res != NULL){
                                                             echo "color:red;";
                                                         }}
                                                         $choose_like->free();

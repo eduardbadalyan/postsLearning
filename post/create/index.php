@@ -12,7 +12,7 @@
 
             $mysqli->query ("INSERT INTO `posts` VALUES (NULL,'".$title."','".$description."','".$user_id."')");
             $mysqli->close ();
-            header ("Location: create_likes.php");
+            header ("Location: /");
             exit;
         }
 ?>

@@ -12,12 +12,16 @@
         $select_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
         $like_result = $select_like->fetch_assoc()["result"];
         if($_GET["like"] == $line["id"]) {
-            if($like_result == 1){
-                $mysqli->query ("UPDATE `likes` SET `result` = NULL WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
+            if(is_null($like_result) == true) {
+                $mysqli->query ("INSERT INTO `likes` VALUES (NULL,'".$line["id"]."','".$_COOKIE["user_id"]."',1);");     
             }else{
-                $mysqli->query ("UPDATE `likes` SET `result` = '1' WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");     
-            }  
-        }
+            if($like_result == 1){
+                $mysqli->query ("DELETE FROM `likes` WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
+            }
+            else if($like_result == 0){
+                $mysqli->query ("UPDATE `likes` SET `result` = 1 WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
+            }
+        }}
     };
 
     $mysqli->close ();

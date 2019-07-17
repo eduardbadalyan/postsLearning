@@ -13,10 +13,10 @@
         $like_result = $select_like->fetch_assoc()["result"];
         if($_GET["dislike"] == $line["id"]) {
             if(is_null($like_result) == true) {
-                $mysqli->query ("UPDATE `likes` SET `result` = '0' WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
+                $mysqli->query ("INSERT INTO `likes` VALUES (NULL,'".$line["id"]."','".$_COOKIE["user_id"]."',0);");
             }else{
                 if($like_result == 0){
-                    $mysqli->query ("UPDATE `likes` SET `result` = NULL WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
+                    $mysqli->query ("DELETE FROM `likes` WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
                     }else{
                     $mysqli->query ("UPDATE `likes` SET `result` = '0' WHERE `likes`.`post_id` = ".$line["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");  
                 }
