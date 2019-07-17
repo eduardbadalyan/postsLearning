@@ -51,6 +51,7 @@
         header ("Location: /?my-posts=1");
         exit;
     };
+
 ?>
 <html>
     <head>
@@ -59,7 +60,7 @@
                                  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
                                  crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/f5f6b39f2f.js"></script>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="styles.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
             <?php
@@ -67,49 +68,85 @@
                     $id = $gic["id"];
             ?>
                 $(document).ready(function () {
-                    $("#like<?=$id?>").bind("click",function() {
+                    $("#like<?=$id?>").bind("click",function(e) {
+                        e.preventDefault();
                         $.ajax ({
-                            url: "like.php",
+                            url: "post/like/like.php",
                             type: "POST",
-                            data: ({order:"like",post_id:<?=$id?>}),
+                            data: ({post_id:<?=$id?>}),
                             dataType: "html",
                             //beforeSend: funcBefore,
-                            success: function  (like,dislike) {
-                                if(like == 1){
-                                    document.getElementById('like<?=$id?>').style.color = "blue";
-                                }else if(like == 0){
-                                    document.getElementById('like<?=$id?>').style.color = "grey";
-                                };
-                                if(dislike == 1){
-                                    document.getElementById('dislike<?=$id?>').style.color = "blue";
-                                }else if(dislike == 0){
-                                    document.getElementById('dislike<?=$id?>').style.color = "grey";
-                                }else{
-                                    document.getElementById('like<?=$id?>').style.color = "pink";
-                                }                                
+                            success: function  (like) {
+                                var btndislike = document.getElementById('dislike<?=$id?>');
+                                var btnlike = document.getElementById('like<?=$id?>');
+
+                                var cdislike = document.getElementById('cdislike<?=$id?>').innerHTML;
+                                var clike = document.getElementById('clike<?=$id?>').innerHTML;
+
+                                var countdislike = parseFloat(cdislike);
+                                var countlike = parseFloat(clike);
+
+                                if(like == '1,0'){
+                                    btnlike.style.color = "blue";
+                                    btndislike.style.color = "grey";
+                                    
+                                    countlike++;
+                                }else if(like == '1,-1'){
+                                    btnlike.style.color = "blue";
+                                    btndislike.style.color = "grey";
+
+                                    countlike++;
+                                    countdislike--;
+                                }else if(like == '-1,0'){
+                                    btnlike.style.color = "grey";
+
+                                    countlike--;
+                                };  
+                                
+                                document.getElementById('cdislike<?=$id?>').innerHTML = countdislike;
+                                document.getElementById('clike<?=$id?>').innerHTML = countlike;
                             }
                         });
                     });
                 });
                 $(document).ready(function () {
-                    $("#dislike<?=$id?>").bind("click",function() {
+                    $("#dislike<?=$id?>").bind("click",function(e) {
+                        e.preventDefault();
                         $.ajax ({
-                            url: "dislike.php",
+                            url: "post/dislike/dislike.php",
                             type: "POST",
                             data: ({order:"dislike",post_id:<?=$id?>}),
                             dataType: "html",
                             //beforeSend: funcBefore,
-                            success: function (like,dislike) {
-                                if(like == 1){
-                                    document.getElementById('like<?=$id?>').style.color = "blue";
-                                }else if(like == 0){
-                                    document.getElementById('like<?=$id?>').style.color = "grey";
-                                };
-                                if(dislike == 1){
-                                    document.getElementById('dislike<?=$id?>').style.color = "blue";
-                                }else if(dislike == 0){
-                                    document.getElementById('dislike<?=$id?>').style.color = "grey";
-                                }                                
+                            success: function (like) {
+                                var btndislike = document.getElementById('dislike<?=$id?>');
+                                var btnlike = document.getElementById('like<?=$id?>');
+
+                                var cdislike = document.getElementById('cdislike<?=$id?>').innerHTML;
+                                var clike = document.getElementById('clike<?=$id?>').innerHTML;
+
+                                var countdislike = parseFloat(cdislike);
+                                var countlike = parseFloat(clike);
+
+                                if(like == '0,1'){
+                                    btndislike.style.color = "red";
+                                    btnlike.style.color = "grey";
+
+                                    countdislike++;
+                                }else if(like == '-1,1'){
+                                    btndislike.style.color = "red";
+                                    btnlike.style.color = "grey";
+
+                                    countdislike++;
+                                    countlike--;
+                                }else if(like == '0,-1'){
+                                    btndislike.style.color = "grey";
+
+                                    countdislike--;
+                                }; 
+                                
+                                document.getElementById('cdislike<?=$id?>').innerHTML = countdislike;
+                                document.getElementById('clike<?=$id?>').innerHTML = countlike;
                             }
                         });
                     });
@@ -171,46 +208,44 @@
                             if($_GET["my-posts"] == 1){
                                 function printMyPosts ($result_set,$mysqli) {
                                     while (($row = $result_set->fetch_assoc()) != false) {
+                                        if ($row["count_dislikes"] == NULL) {
+                                            $row["count_dislikes"] = 0;
+                                        }
+                                        if ($row["count_likes"] == NULL) {
+                                            $row["count_likes"] = 0;
+                                        }
                                         if ($_COOKIE['user_id'] == $row["user_id"]){
                                         echo "  <div class=\"card text-justify card-container\">
                                                     <div class=\"card-body\">                                                 
                                                         <h4 class=\"card-title\">".$row["title"]."</h4>
                                                         <p class=\"card-text\">".$row["description"]."</p>
                                                         <p class=\"card-text text-right\" style=\"font-size:12px;\">".$row["name"]."</p>
-                                                        <br>".$row["id"]."";
+                                                        <br>";
                                                         $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
                                                         $like_res = $choose_like->fetch_array(MYSQLI_ASSOC)["result"];
-                                                        echo $like_res;
                                                         if($_COOKIE['name'] != ''){
-                                                        echo "<button type=\"submit\" id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
+                                                        echo "<button id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
                                                         if($like_res != NULL){
                                                         if ($like_res == true){
                                                             echo "color:blue;";
                                                         }}
-                                                        echo"background-color:white;border:none;\">
+                                                        echo"\" class=\"btn-like\">
                                                             <i class=\"fas fa-thumbs-up\"></i>
                                                         </button>
                                                         <span style=\"margin-right:20px;";
-                                                        if($like_res != NULL){
-                                                            if ($like_res == true){
-                                                                echo "color:blue;";
-                                                        }}
-                                                        echo "\">".$row["count_likes"]."</span>
-                                                        <button type=\"submit\" id=\"dislike".$row["id"]."\" name=\"dislike".$row["id"]."\" style=\"";
+                                                        echo "\" id=\"clike".$row["id"]."\">".$row["count_likes"]."</span>
+                                                        <button id=\"dislike".$row["id"]."\" class=\"btn-dislike\" name=\"dislike".$row["id"]."\" style=\"";
                                                         if(is_null($like_res) == false){
                                                         if ($like_res != NULL){
                                                             echo "color:red;";
                                                         }}
-                                                        $choose_like->free();
-                                                        echo "background-color:white;border:none;margin-left=50px;\">
+                                                        echo "\">
                                                             <i class=\"fas fa-thumbs-down\"></i>
+                                                            <span style=\"margin-right:20px;";
+                                                            $choose_like->free();
+                                                        echo "\" id=\"cdislike".$row["id"]."\">".$row["count_dislikes"]."</span>
                                                         </button>
-                                                        <span style=\"margin-right:20px;";
-                                                        if($like_res != NULL){
-                                                            if ($like_res == false){
-                                                                echo "color:red;";
-                                                            }}
-                                                        echo "\">".$row["count_dislikes"]."</span><br><br>
+                                                        <br><br>
                                                         <input type=\"submit\" name=\"edit_post".$row["id"]."\" value=\"Edit post\" class=\"btn btn-success\">
                                                         <input type=\"submit\" name=\"delete_post".$row["id"]."\" value=\"Delete post\" class=\"btn btn-danger\">
                                                         </div></div>";
@@ -221,6 +256,12 @@
                             }else{
                             function printResult ($result_set,$mysqli) {
                                 while (($row = $result_set->fetch_assoc()) != false) {
+                                    if ($row["count_dislikes"] == NULL) {
+                                        $row["count_dislikes"] = 0;
+                                    }
+                                    if ($row["count_likes"] == NULL) {
+                                        $row["count_likes"] = 0;
+                                    }
                                     echo "  <div class=\"card text-justify card-container\">
                                                 <div class=\"card-body\">
                                                     <h4 class=\"card-title\">".$row["title"]."</h4>
@@ -231,35 +272,28 @@
                                                     if($_COOKIE['name'] != ''){
                                                     $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
                                                     $like_res = $choose_like->fetch_array(MYSQLI_ASSOC)["result"];
-                                                    echo "<button type=\"submit\" id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
+                                                    echo "<button id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
                                                     if($like_res != NULL){
                                                     if ($like_res == true){
                                                         echo "color:blue;";
                                                     }}
-                                                    echo"background-color:white;border:none;\">
+                                                    echo"\" class=\"btn-like\">
                                                         <i class=\"fas fa-thumbs-up\"></i>
+                                                        <span style=\"margin-right:20px;";
+                                                        echo "\" id=\"clike".$row["id"]."\">".$row["count_likes"]."</span>
                                                     </button>
-                                                    <span style=\"margin-right:20px;";
-                                                    if($like_res != NULL){
-                                                        if ($like_res == true){
-                                                            echo "color:blue;";
-                                                    }}
-                                                    echo "\">".$row["count_likes"]."</span>
-                                                    <button type=\"submit\" id=\"dislike".$row["id"]."\" name=\"dislike".$row["id"]."\" style=\"";
+                                                    <button id=\"dislike".$row["id"]."\" class=\"btn-dislike\" name=\"dislike".$row["id"]."\" style=\"";
                                                     if($like_res != NULL){
                                                     if ($like_res == false){
                                                         echo "color:red;";
                                                     }}
                                                     $choose_like->free();
-                                                    echo "background-color:white;border:none;margin-left=50px;\">
+                                                    echo "\">
                                                         <i class=\"fas fa-thumbs-down\"></i>
+                                                        <span style=\"margin-right:20px;";
+                                                    echo "\" id=\"cdislike".$row["id"]."\">".$row["count_dislikes"]."</span>
                                                     </button>
-                                                    <span style=\"margin-right:20px;";
-                                                    if($like_res != NULL){
-                                                        if ($like_res == false){
-                                                            echo "color:red;";
-                                                        }}
-                                                    echo "\">".$row["count_dislikes"]."</span><br><br>";};
+                                                    <br><br>";};
                                                 if($_COOKIE['name'] == ''){
                                                     echo "</div>
                                                     </div>";}

@@ -37,3 +37,24 @@ form{
         .btn-pages{
             margin:0 20px;
         }
+
+        .btn-like{
+            background-color:white;
+            border:none;
+            color:grey;
+        }
+
+            .btn-like:focus{
+                outline: none;
+            }
+
+        .btn-dislike{
+            background-color:white;
+            border:none;
+            margin-left:50px;
+            color: grey;
+        }
+
+            .btn-dislike:focus{
+                outline: none;
+            }
