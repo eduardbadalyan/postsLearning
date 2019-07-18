@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Июл 17 2019 г., 20:00
+-- Время создания: Июл 18 2019 г., 10:50
 -- Версия сервера: 5.7.26-0ubuntu0.18.04.1
 -- Версия PHP: 7.2.20-1+ubuntu18.04.1+deb.sury.org+1
 
@@ -19,6 +19,32 @@ SET time_zone = "+00:00";
 --
 -- База данных: `myBase`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `likes`
+--
+
+CREATE TABLE `likes` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `post_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `result` tinyint(1) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `likes`
+--
+
+INSERT INTO `likes` (`id`, `post_id`, `user_id`, `result`) VALUES
+(1, 21, 2, 1),
+(2, 16, 2, 1),
+(8, 4, 2, 1),
+(9, 1, 2, 0),
+(11, 4, 1, 1),
+(19, 22, 1, 1),
+(20, 16, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -42,6 +68,8 @@ INSERT INTO `posts` (`id`, `title`, `description`, `user_id`) VALUES
 (2, 'Zlatan said', 'I am God.', 3),
 (3, 'About God\'s hand', 'I striked that gol with God\'s hand.', 5),
 (4, 'Mkhitaryan get merried with Betty', 'In Italy.', 7),
+(21, 'Edo', 'aaa', 2),
+(22, 'Edo', 'yahoooooo', 1),
 (16, 'Edo', 'du bomb es!!!', 10);
 
 -- --------------------------------------------------------
@@ -80,6 +108,12 @@ INSERT INTO `users` (`id`, `name`, `age`, `email`, `password`) VALUES
 --
 
 --
+-- Индексы таблицы `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `posts`
 --
 ALTER TABLE `posts`
@@ -96,10 +130,15 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `likes`
+--
+ALTER TABLE `likes`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+--
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
