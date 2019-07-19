@@ -1,4 +1,5 @@
 <?php
+    session_start();
     $mysqli = new mysqli ("localhost", "root", "root", "myBase");
     $mysqli->query ("SET NAMES 'utf8'");
     $result_set = $mysqli->query ("SELECT p.*,`users`.name FROM (SELECT x.*,y.count_dislikes FROM 
@@ -22,24 +23,24 @@
     
     
     if(isset($_POST["add_post"])) {
-        header ("Location: post/create/");
+        header ("Location: /post/create/");
         exit;
     };
     if(isset($_POST["register"])) {
-        header ("Location: auth/register/");
+        header ("Location: /auth/register/");
         exit;
     };
     if(isset($_POST["exit"])) {
-        header ("Location: auth/exit/exit.php");
+        header ("Location: /auth/exit/exit.php");
         exit;
     };
     while (($line = $result->fetch_assoc()) != false) {
         if(isset($_POST["edit_post".$line["id"].""])) {
-            header ("Location: post/edit/?edit=".$line["id"]."");
+            header ("Location: /post/edit/?edit=".$line["id"]."");
             exit;
         }
         if(isset($_POST["delete_post".$line["id"].""])) {
-            header ("Location: post/delete/delete.php?delete=".$line["id"]."");
+            header ("Location: /post/delete/delete.php?delete=".$line["id"]."");
             exit;
         }
     };
@@ -60,7 +61,7 @@
                                  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
                                  crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/f5f6b39f2f.js"></script>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="/style.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
             <?php
@@ -71,7 +72,7 @@
                     $("#like<?=$id?>").bind("click",function(e) {
                         e.preventDefault();
                         $.ajax ({
-                            url: "post/like/like.php",
+                            url: "/post/like/like.php",
                             type: "POST",
                             data: ({post_id:<?=$id?>}),
                             dataType: "html",
@@ -113,7 +114,7 @@
                     $("#dislike<?=$id?>").bind("click",function(e) {
                         e.preventDefault();
                         $.ajax ({
-                            url: "post/dislike/dislike.php",
+                            url: "/post/dislike/dislike.php",
                             type: "POST",
                             data: ({order:"dislike",post_id:<?=$id?>}),
                             dataType: "html",
@@ -161,9 +162,9 @@
         <div class="header dropdown-header table-dark">
             <div class="row">
                 <?php
-                    if($_COOKIE['name'] == ''):
+                    if($_SESSION['name'] == '' && $_SESSION["user_id"] == ""):
                 ?>
-                <form name="login" action="auth/login/" method="post">
+                <form name="login" action="/auth/login/" method="post">
                     <input type="submit" name="login" value="Log in" class="btn btn-outline-light btn-header">
                 </form>
                 <form action="" name="register" method="post">
@@ -173,7 +174,7 @@
                     else:
                 ?>
                 <form action="" name="exit" method="post">
-                    <span style="color:white;margin-left:20px;">Hello <?=$_COOKIE['name']?>!!!</span>
+                    <span style="color:white;margin-left:20px;">Hello <?=$_SESSION['name']?>!!!</span>
                     <input type="submit" name="exit" value="Exit" class="btn btn-outline-light btn-header"">
                 </form>
                 <?php
@@ -183,7 +184,7 @@
         </div>
         <div class="content">
             <?php
-                if($_COOKIE['name'] != ''):
+                if($_SESSION['name'] != '' && $_SESSION["user_id"] != ""):
             ?>
                 <form action="" name="pages" method="post" style="position:absolute;right:45%;">
                 <input type="submit" name="home" value="Home" class="btn btn-secondary btn-pages">|
@@ -196,7 +197,7 @@
                 <div class="container">
                     <form action="" name="feed" method="post">
                         <?php
-                            if($_COOKIE['name'] != ''):
+                            if($_SESSION['name'] != '' && $_SESSION["user_id"] != ""):
                         ?>
                         <div class="card text-center card-container">
                             <div class="card-body">
@@ -214,16 +215,16 @@
                                         if ($row["count_likes"] == NULL) {
                                             $row["count_likes"] = 0;
                                         }
-                                        if ($_COOKIE['user_id'] == $row["user_id"]){
+                                        if ($_SESSION['user_id'] == $row["user_id"]){
                                         echo "  <div class=\"card text-justify card-container\">
                                                     <div class=\"card-body\">                                                 
                                                         <h4 class=\"card-title\">".$row["title"]."</h4>
                                                         <p class=\"card-text\">".$row["description"]."</p>
                                                         <p class=\"card-text text-right\" style=\"font-size:12px;\">".$row["name"]."</p>
                                                         <br>";
-                                                        $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
+                                                        $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_SESSION["user_id"].";");
                                                         $like_res = $choose_like->fetch_array(MYSQLI_ASSOC)["result"];
-                                                        if($_COOKIE['name'] != ''){
+                                                        if($_SESSION['name'] != '' && $_SESSION["user_id"] != ""){
                                                         echo "<button id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
                                                         if($like_res != NULL){
                                                         if ($like_res == true){
@@ -235,8 +236,8 @@
                                                         <span style=\"margin-right:20px;";
                                                         echo "\" id=\"clike".$row["id"]."\">".$row["count_likes"]."</span>
                                                         <button id=\"dislike".$row["id"]."\" class=\"btn-dislike\" name=\"dislike".$row["id"]."\" style=\"";
-                                                        if(is_null($like_res) == false){
-                                                        if ($like_res != NULL){
+                                                        if($like_res != NULL){
+                                                        if ($like_res == false){
                                                             echo "color:red;";
                                                         }}
                                                         echo "\">
@@ -269,8 +270,8 @@
                                                     <p class=\"card-text text-right\" style=\"font-size:12px;\">"
                                                     .$row["name"]
                                                     ."</p><br>";
-                                                    if($_COOKIE['name'] != ''){
-                                                    $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_COOKIE["user_id"].";");
+                                                    if($_SESSION["name"] != '' && $_SESSION["user_id"] != ""){
+                                                    $choose_like = $mysqli->query ("SELECT * FROM `likes` WHERE `likes`.`post_id` = ".$row["id"]." AND `likes`.`user_id` = ".$_SESSION["user_id"].";");
                                                     $like_res = $choose_like->fetch_array(MYSQLI_ASSOC)["result"];
                                                     echo "<button id=\"like".$row["id"]."\" name=\"like".$row["id"]."\" style=\"";
                                                     if($like_res != NULL){
@@ -294,10 +295,10 @@
                                                     echo "\" id=\"cdislike".$row["id"]."\">".$row["count_dislikes"]."</span>
                                                     </button>
                                                     <br><br>";};
-                                                if($_COOKIE['name'] == ''){
+                                                if($_SESSION["name"] == '' && $_SESSION["user_id"] == ""){
                                                     echo "</div>
                                                     </div>";}
-                                                    else if ($_COOKIE['user_id'] == $row["user_id"]){
+                                                    else if ($_SESSION['user_id'] == $row["user_id"]){
                                                     echo "<input type=\"submit\" name=\"edit_post".$row["id"]."\" value=\"Edit post\" class=\"btn btn-success\">
                                                     <input type=\"submit\" name=\"delete_post".$row["id"]."\" value=\"Delete post\" class=\"btn btn-danger\">
                                                     </div>

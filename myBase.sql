@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Июл 18 2019 г., 10:50
+-- Время создания: Июл 19 2019 г., 11:45
 -- Версия сервера: 5.7.26-0ubuntu0.18.04.1
 -- Версия PHP: 7.2.20-1+ubuntu18.04.1+deb.sury.org+1
 
@@ -40,11 +40,21 @@ CREATE TABLE `likes` (
 INSERT INTO `likes` (`id`, `post_id`, `user_id`, `result`) VALUES
 (1, 21, 2, 1),
 (2, 16, 2, 1),
-(8, 4, 2, 1),
-(9, 1, 2, 0),
+(8, 4, 2, 0),
+(9, 1, 2, 1),
 (11, 4, 1, 1),
 (19, 22, 1, 1),
-(20, 16, 10, 1);
+(20, 16, 10, 1),
+(21, 22, 2, 1),
+(22, 4, 4, 1),
+(23, 16, 4, 1),
+(24, 22, 10, 1),
+(25, 21, 10, 1),
+(26, 22, 12, 1),
+(27, 16, 12, 1),
+(28, 2, 2, 0),
+(29, 4, 10, 1),
+(30, 3, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -100,8 +110,7 @@ INSERT INTO `users` (`id`, `name`, `age`, `email`, `password`) VALUES
 (7, 'Mkhitaryan', 29, 'mkhitaryan@gmail.com', 'b05f31b268bf6eef7c22d6f1e232f1ae'),
 (8, 'Hazard', 28, 'hazard@gmail.com', 'afbe5099e0f5bb8cd70f7e8563759d33'),
 (9, 'Iren', 49, 'mkrtchyan@gmail.com', '202cb962ac59075b964b07152d234b70'),
-(10, 'edo', 18, 'edo@mail.ru', 'd2d612f72e42577991f4a5936cecbcc0'),
-(11, 'edo', 18, 'edo@mail.ru', 'd2d612f72e42577991f4a5936cecbcc0');
+(10, 'edo', 18, 'edo@mail.ru', 'd2d612f72e42577991f4a5936cecbcc0');
 
 --
 -- Индексы сохранённых таблиц
@@ -133,17 +142,17 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

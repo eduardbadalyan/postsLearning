@@ -1,4 +1,5 @@
 <?php
+session_start();
         $mysqli = new mysqli ("localhost", "root", "root", "myBase");
         $mysqli->query ("SET NAMES 'utf8'");
         $select_users = $mysqli->query ("SELECT * FROM `users` ORDER BY id");
@@ -38,7 +39,7 @@
 </head>
 <body>
     <?php
-    if($_COOKIE['user_id'] != $user_id):
+    if($_SESSION['user_id'] != $user_id):
         $mysqli->close ();
         header ("Location: /");
         exit;
