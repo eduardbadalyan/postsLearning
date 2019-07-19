@@ -1,21 +1,7 @@
 <?php
 session_start();
-        $mysqli = new mysqli ("localhost", "root", "root", "myBase");
-        $mysqli->query ("SET NAMES 'utf8'");
-        $select_users = $mysqli->query ("SELECT * FROM `users` ORDER BY id");
-        if(isset($_POST["done"])) {
-            $title = htmlspecialchars ($_POST["title"]);
-            $description = htmlspecialchars ($_POST["description"]);
-            $user_id = $_SESSION['user_id'];
-
-            $title = addcslashes($title, "'");
-            $description = addcslashes($description, "'");
-
-            $mysqli->query ("INSERT INTO `posts` VALUES (NULL,'".$title."','".$description."','".$user_id."')");
-            $mysqli->close ();
-            header ("Location: /");
-            exit;
-        }
+    $name = $_SESSION["name"];
+    $user_id = $_SESSION["user_id"];
 ?>
 <!DOCTYPE>
 <html>
@@ -26,6 +12,45 @@ session_start();
             integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
             crossorigin="anonymous">
     <link rel="stylesheet" href="/post/create/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#done").bind("click",function(e) {
+                var title = document.getElementById('title').value;
+                var description = document.getElementById('description').value;
+                e.preventDefault();
+                $.ajax ({
+                    url: "/post/create/create.php",
+                    type: "POST",
+                    data: ({title: title,description: description}),
+                    dataType: "html",
+                    //beforeSend: funcBefore,
+                    success: function (answer) {
+                                var titleError = document.getElementById("titleError");
+                                var descriptionError = document.getElementById("descriptionError");
+
+                                var title = document.getElementById('title').value;
+                                var description = document.getElementById('description').value;
+
+                            if(answer === "fail"){
+                                titleError.style.display = "none";
+                                descriptionError.style.display = "none";
+
+                                if(title === ""){
+                                    titleError.style.display = "block";
+                                }
+                                if(description === ""){
+                                    descriptionError.style.display = "block";
+                                }
+                            }else{
+                                var url = "/";
+                                $(location).attr('href',url);
+                            }
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <?php
@@ -37,20 +62,28 @@ session_start();
     ?>
     <div class="content">
         <h2>Add post</h2>
-        <form name="feed" action="" method="post">
+        <form name="feed" method="post">
             <label for="title"><h4>Title: </h4></label><br>
-            <input type="text" id="title" name="title" style="width:290px;padding:5px;" placeholder="add Title..."><br><br>
+            <input type="text" id="title" name="title" style="width:290px;padding:5px;" value="<?=$_SESSION["title"]?>" placeholder="add Title..."><br>
+            <span id="titleError" style="color: red;display:none;">Write Title</span><br><br>
 
             <label for="description"><h4>Description: </h4></label><br>
-            <textarea name="description" id="description" cols="30" rows="5" placeholder="Add description..."></textarea><br><br>
+            <textarea name="description" id="description" cols="30" rows="5" placeholder="Add description..."><?=$_SESSION["description"]?></textarea><br>
+            <span id="descriptionError" style="color: red;display:none;">Write Description</span><br><br>
 
-            <h6>User: <?=$_SESSION['name'];?></h6><br><br>
+            <h6>User: <?=$_SESSION['name']?></h6><br><br>
 
-            <input type="submit" name="done" value="Done!" class="btn btn-success">
+            <input type="button" id="done" name="done" value="Done!" class="btn btn-success">
         </form>
     </div>
     <?php
     endif;
+    session_unset();
+    session_destroy();
+    session_start();
+        $_SESSION["name"] = $name;
+        $_SESSION["user_id"] = $user_id;
     ?>
+    
 </body>
 </html>

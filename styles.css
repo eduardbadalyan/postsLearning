@@ -42,7 +42,12 @@ form{
             background-color:white;
             border:none;
             color:grey;
+            transition: .15s;
         }
+
+            .btn-like:hover{
+                border-bottom: 2px solid blue;
+            }
 
             .btn-like:focus{
                 outline: none;
@@ -53,7 +58,12 @@ form{
             border:none;
             margin-left:50px;
             color: grey;
+            transition: .15s;
         }
+
+            .btn-dislike:hover{
+                border-bottom: 2px solid red;
+            }
 
             .btn-dislike:focus{
                 outline: none;

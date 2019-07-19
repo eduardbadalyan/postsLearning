@@ -39,10 +39,10 @@
             header ("Location: /post/edit/?edit=".$line["id"]."");
             exit;
         }
-        if(isset($_POST["delete_post".$line["id"].""])) {
-            header ("Location: /post/delete/delete.php?delete=".$line["id"]."");
-            exit;
-        }
+        // if(isset($_POST["delete_post".$line["id"].""])) {
+        //     header ("Location: /post/delete/delete.php?delete=".$line["id"]."");
+        //     exit;
+        // }
     };
     if(isset($_POST["home"])) {
         header ("Location: /");
@@ -61,7 +61,7 @@
                                  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
                                  crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/f5f6b39f2f.js"></script>
-        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/styles.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
             <?php
@@ -152,6 +152,24 @@
                         });
                     });
                 });
+                $(document).ready(function () {
+                    $("#delete_post<?=$id?>").bind("click",function(e) {
+                        e.preventDefault();
+                        $.ajax ({
+                            url: "/post/delete/delete.php",
+                            type: "POST",
+                            data: ({post_id:<?=$id?>}),
+                            dataType: "html",
+                            //beforeSend: funcBefore,
+                            success: function  (answer) {
+                                var card = document.getElementById('card<?=$id?>');
+                                if(answer === "success"){
+                                    card.style.display = "none"
+                                };
+                            }
+                        });
+                    });
+                });
             <?php
                 endwhile;
             ?>
@@ -216,7 +234,7 @@
                                             $row["count_likes"] = 0;
                                         }
                                         if ($_SESSION['user_id'] == $row["user_id"]){
-                                        echo "  <div class=\"card text-justify card-container\">
+                                        echo "  <div class=\"card text-justify card-container\" id=\"card".$row["id"]."\">
                                                     <div class=\"card-body\">                                                 
                                                         <h4 class=\"card-title\">".$row["title"]."</h4>
                                                         <p class=\"card-text\">".$row["description"]."</p>
@@ -248,7 +266,7 @@
                                                         </button>
                                                         <br><br>
                                                         <input type=\"submit\" name=\"edit_post".$row["id"]."\" value=\"Edit post\" class=\"btn btn-success\">
-                                                        <input type=\"submit\" name=\"delete_post".$row["id"]."\" value=\"Delete post\" class=\"btn btn-danger\">
+                                                        <input type=\"button\" id=\"delete_post".$row["id"]."\" name=\"delete_post".$row["id"]."\" value=\"Delete post\" class=\"btn btn-danger\">
                                                         </div></div>";
                                                 };
                                     }
@@ -263,7 +281,7 @@
                                     if ($row["count_likes"] == NULL) {
                                         $row["count_likes"] = 0;
                                     }
-                                    echo "  <div class=\"card text-justify card-container\">
+                                    echo "  <div class=\"card text-justify card-container\" id=\"card".$row["id"]."\">
                                                 <div class=\"card-body\">
                                                     <h4 class=\"card-title\">".$row["title"]."</h4>
                                                     <p class=\"card-text\">".$row["description"]."</p>
@@ -300,7 +318,7 @@
                                                     </div>";}
                                                     else if ($_SESSION['user_id'] == $row["user_id"]){
                                                     echo "<input type=\"submit\" name=\"edit_post".$row["id"]."\" value=\"Edit post\" class=\"btn btn-success\">
-                                                    <input type=\"submit\" name=\"delete_post".$row["id"]."\" value=\"Delete post\" class=\"btn btn-danger\">
+                                                    <input type=\"button\" id=\"delete_post".$row["id"]."\" name=\"delete_post".$row["id"]."\" value=\"Delete post\" class=\"btn btn-danger\">
                                                     </div>
                                             </div>";}
                                             else{

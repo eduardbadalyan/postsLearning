@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Июл 19 2019 г., 11:45
+-- Время создания: Июл 19 2019 г., 15:51
 -- Версия сервера: 5.7.26-0ubuntu0.18.04.1
 -- Версия PHP: 7.2.20-1+ubuntu18.04.1+deb.sury.org+1
 
@@ -38,10 +38,9 @@ CREATE TABLE `likes` (
 --
 
 INSERT INTO `likes` (`id`, `post_id`, `user_id`, `result`) VALUES
-(1, 21, 2, 1),
 (2, 16, 2, 1),
 (8, 4, 2, 0),
-(9, 1, 2, 1),
+(34, 1, 2, 1),
 (11, 4, 1, 1),
 (19, 22, 1, 1),
 (20, 16, 10, 1),
@@ -49,12 +48,11 @@ INSERT INTO `likes` (`id`, `post_id`, `user_id`, `result`) VALUES
 (22, 4, 4, 1),
 (23, 16, 4, 1),
 (24, 22, 10, 1),
-(25, 21, 10, 1),
 (26, 22, 12, 1),
 (27, 16, 12, 1),
 (28, 2, 2, 0),
 (29, 4, 10, 1),
-(30, 3, 2, 1);
+(35, 3, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -78,7 +76,7 @@ INSERT INTO `posts` (`id`, `title`, `description`, `user_id`) VALUES
 (2, 'Zlatan said', 'I am God.', 3),
 (3, 'About God\'s hand', 'I striked that gol with God\'s hand.', 5),
 (4, 'Mkhitaryan get merried with Betty', 'In Italy.', 7),
-(21, 'Edo', 'aaa', 2),
+(30, 'Alik', 'Respect', 2),
 (22, 'Edo', 'yahoooooo', 1),
 (16, 'Edo', 'du bomb es!!!', 10);
 
@@ -142,12 +140,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
