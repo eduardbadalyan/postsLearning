@@ -20,6 +20,8 @@
     $result = $mysqli->query ("SELECT posts.*,users.name FROM `posts` INNER JOIN `users` ON users.id=posts.user_id ORDER BY posts.id");
     $result_script = $mysqli->query ("SELECT posts.*,users.name FROM `posts` INNER JOIN `users` ON users.id=posts.user_id ORDER BY posts.id");
 
+    $select_user = $mysqli->query ("SELECT users.* FROM `users` WHERE `id` = '".$_SESSION["user_id"]."'")->fetch_assoc();
+
     
     
     if(isset($_POST["add_post"])) {
@@ -39,10 +41,6 @@
             header ("Location: /post/edit/?edit=".$line["id"]."");
             exit;
         }
-        // if(isset($_POST["delete_post".$line["id"].""])) {
-        //     header ("Location: /post/delete/delete.php?delete=".$line["id"]."");
-        //     exit;
-        // }
     };
     if(isset($_POST["home"])) {
         header ("Location: /");
@@ -56,12 +54,12 @@
 ?>
 <html>
     <head>
-        <title>test</title>
+        <title>Բամbook</title>
         <link   rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
                                  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
                                  crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/f5f6b39f2f.js"></script>
-        <link rel="stylesheet" href="/styles.css">
+        <link rel="stylesheet" href="/style.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
             <?php
@@ -191,9 +189,23 @@
                 <?php
                     else:
                 ?>
+                    <a href="/auth/changeAvatar/">
+                        <div class="avatar-container">
+                            <img id="output" alt="Avatar" src="<?=$select_user["avatar"];?>" class="avatar"/>
+                            <div class="overlay">
+                                <div class="text">Change Avatar</div>
+                            </div>
+                        </div>
+                    </a>
                 <form action="" name="exit" method="post">
                     <span style="color:white;margin-left:20px;">Hello <?=$_SESSION['name']?>!!!</span>
                     <input type="submit" name="exit" value="Exit" class="btn btn-outline-light btn-header"">
+                </form>
+                <form name="changes" action="/auth/change/" method="post">
+                    <input type="submit" name="change" value="Edit Profile" class="btn btn-outline-light btn-header">
+                </form>
+                <form name="changePass" action="/auth/changePassword/" method="post">
+                    <input type="submit" name="changePassword" value="Change Password" class="btn btn-outline-light btn-header">
                 </form>
                 <?php
                     endif;

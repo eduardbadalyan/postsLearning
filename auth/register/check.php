@@ -16,10 +16,10 @@
         echo "fail";
         exit();
     }
-    //$password = md5($password);
+    $password = md5($password);
 
     $mysqli = new mysqli("localhost", "root", "root", "myBase");
-    $mysqli->query("INSERT INTO `users` VALUES (NULL,'".$name."','".$age."','".$email."','".$password."')");
+    $mysqli->query("INSERT INTO `users` VALUES (NULL,'".$name."','".$age."','".$email."','".$password."','/avatar/avatar.png')");
     $result = $mysqli->query("SELECT * FROM `users` WHERE `email`='$email' AND `password`='$password'");
     $user = $result->fetch_assoc();
     session_start();

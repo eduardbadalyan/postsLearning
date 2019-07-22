@@ -1,0 +1,115 @@
+body {
+    width: 100%;
+}
+
+form{
+    margin-block-end: 0;
+}
+
+    .header {
+        padding: .5rem 15%;
+    }
+
+        .btn-header{
+            margin-left:20px;  
+        }
+        
+        .avatar {
+            vertical-align: middle;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .avatar-container {
+            position: relative;
+            vertical-align: middle;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            float: left;
+        }
+              
+              .overlay {
+                position: absolute;
+                border-radius: 50%;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: #008CBA;
+                overflow: hidden;
+                width: 100%;
+                height: 0;
+                transition: .5s ease;
+              }
+              
+              .avatar-container:hover .overlay {
+                height: 100%;
+              }
+              
+              .text {
+                color: white;
+                font-size: 6px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                text-align: center;
+              }
+
+        .title-header{
+            color: #cccccc;
+        }
+
+            .title-header:hover{
+                color: #cccccc;
+            }
+
+    .content {
+        padding: 1.5rem 15%;
+    }
+
+        .card-container{
+            width: 31.2%;
+            float:left;
+            border:none;
+            margin:1%;
+            min-height: 300px;
+        }
+
+        .btn-pages{
+            margin:0 20px;
+        }
+
+        .btn-like{
+            background-color:white;
+            border:none;
+            color:grey;
+            transition: .15s;
+        }
+
+            .btn-like:hover{
+                border-bottom: 2px solid blue;
+            }
+
+            .btn-like:focus{
+                outline: none;
+            }
+
+        .btn-dislike{
+            background-color:white;
+            border:none;
+            margin-left:50px;
+            color: grey;
+            transition: .15s;
+        }
+
+            .btn-dislike:hover{
+                border-bottom: 2px solid red;
+            }
+
+            .btn-dislike:focus{
+                outline: none;
+            }

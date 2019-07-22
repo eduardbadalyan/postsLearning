@@ -14,20 +14,6 @@ session_start();
                 $user_id = $row["user_id"];
             };
         };
-        // if(isset($_POST["done"])) {
-        //     $title = htmlspecialchars ($_POST["title"]);
-        //     $description = htmlspecialchars ($_POST["description"]);
-
-        //     $title = addcslashes($title, "'");
-        //     $description = addcslashes($description, "'");
-
-        //     $mysqli->query ("UPDATE `posts` SET `title` = '".$title."' WHERE `posts`.`id` = ".$id.";");
-        //     $mysqli->query ("UPDATE `posts` SET `description` = '".$description."' WHERE `posts`.`id` = ".$id.";");
-        //     $mysqli->close ();
-        //     header ("Location: /");
-        //     exit;
-        // };
-        // $user = $mysqli->query ("SELECT name FROM `users` WHERE id=\"$user_id\"")->fetch_assoc()["name"];
 ?>
 <!DOCTYPE>
 <html>
