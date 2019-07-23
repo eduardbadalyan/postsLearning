@@ -1,7 +1,6 @@
 <?php
     session_start();
-    $mysqli = new mysqli ("localhost", "root", "root", "myBase");
-    $mysqli->query ("SET NAMES 'utf8'");
+    include ('config/db.php');
     $result_set = $mysqli->query ("SELECT p.*,`users`.name FROM (SELECT x.*,y.count_dislikes FROM 
                                                                     (SELECT a.*,b.count_likes FROM 
                                                                         (SELECT `posts`.* FROM `posts`) a 

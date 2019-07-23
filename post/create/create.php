@@ -17,8 +17,7 @@
             exit();
         }
 
-        $mysqli = new mysqli ("localhost", "root", "root", "myBase");
-        $mysqli->query ("SET NAMES 'utf8'");
+        include ('../../config/db.php');
 
             $title = addcslashes($title, "'");
             $description = addcslashes($description, "'");

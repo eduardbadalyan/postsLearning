@@ -2,8 +2,7 @@
 session_start();
     $name = $_SESSION["name"];
     $user_id = $_SESSION["user_id"];
-        $mysqli = new mysqli ("localhost", "root", "root", "myBase");
-        $mysqli->query ("SET NAMES 'utf8'");
+    include ('../../config/db.php');
         $select_users = $mysqli->query ("SELECT * FROM `users` ORDER BY id");
         $result_set = $mysqli->query ("SELECT posts.*,users.name FROM `posts` INNER JOIN `users` ON users.id=posts.user_id ORDER BY posts.id");
         while (($row = $result_set->fetch_assoc()) != false) {

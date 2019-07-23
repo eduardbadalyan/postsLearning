@@ -55,7 +55,6 @@ session_start();
 <body>
     <?php
     if($_SESSION['name'] == ''):
-        $mysqli->close ();
         header ("Location: /");
         exit;
     else:

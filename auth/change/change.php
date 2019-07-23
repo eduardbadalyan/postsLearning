@@ -12,7 +12,7 @@ session_start();
         exit();
     }
 
-    $mysqli = new mysqli("localhost", "root", "root", "myBase");
+    include ('../../config/db.php');
 
     $mysqli->query ("UPDATE `users` SET `name` = '".$name."' WHERE `users`.`id` = ".$_SESSION["user_id"].";");
     $mysqli->query ("UPDATE `users` SET `email` = '".$email."' WHERE `users`.`id` = ".$_SESSION["user_id"].";");

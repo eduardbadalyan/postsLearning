@@ -4,7 +4,7 @@
         header ("Location: /");
         exit;
     }
-    $mysqli = new mysqli("localhost", "root", "root", "myBase");
+    include ('../../config/db.php');
     $result = $mysqli->query("SELECT * FROM `users` WHERE `id`='".$_SESSION["user_id"]."'");
     $user = $result->fetch_assoc();
 

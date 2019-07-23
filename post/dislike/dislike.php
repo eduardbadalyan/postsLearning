@@ -1,6 +1,6 @@
 <?php
 session_start();
-    $mysqli = new mysqli ("localhost", "root", "root", "myBase");
+    include ('../../config/db.php');
 
     $result = $mysqli->query ("SELECT * FROM `posts` ORDER BY posts.id");
 

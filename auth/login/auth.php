@@ -6,7 +6,7 @@
 
     $password = md5($password);
 
-    $mysqli = new mysqli("localhost", "root", "root", "myBase");
+    include ('../../config/db.php');
     //$mysqli->query ("SET NAMES 'utf8'");
     $result = $mysqli->query("SELECT * FROM `users` WHERE `email`='$email' AND `password`='$password'");
     $user = $result->fetch_assoc();
